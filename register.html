@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="auth-card card p-4 mx-auto">
+<h2>Create account</h2>
+<form method="post">
+<input class="form-control mb-3" name="name" placeholder="Full name" required>
+<input class="form-control mb-3" name="email" type="email" placeholder="Email" required>
+<input class="form-control mb-3" name="password" type="password" placeholder="Password (6+ characters)" required>
+<button class="btn btn-primary w-100">Register</button>
+</form>
+</div>
+{% endblock %}

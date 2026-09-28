@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-4">Welcome, {{ current_user.name }}</h2>
+<div class="row g-3 mb-4">
+  <div class="col-md-4"><div class="stat card p-3"><small>Total Income</small><h3>₹{{ "%.2f"|format(income) }}</h3></div></div>
+  <div class="col-md-4"><div class="stat card p-3"><small>Total Expenses</small><h3>₹{{ "%.2f"|format(expense) }}</h3></div></div>
+  <div class="col-md-4"><div class="stat card p-3"><small>Balance</small><h3>₹{{ "%.2f"|format(balance) }}</h3></div></div>
+</div>
+<div class="row g-4">
+<div class="col-lg-5">
+<div class="card p-4 mb-4"><h4>Add Income</h4>
+<form method="post" action="{{ url_for('main.add_income') }}">
+<input class="form-control mb-2" name="source" placeholder="Source (salary, allowance...)" required>
+<input class="form-control mb-2" name="amount" type="number" step="0.01" placeholder="Amount" required>
+<button class="btn btn-success">Add income</button>
+</form></div>
+<div class="card p-4"><h4>Add Expense</h4>
+<form method="post" action="{{ url_for('main.add_expense') }}">
+<select class="form-select mb-2" name="category" required>
+<option value="">Category</option><option>Food</option><option>Travel</option><option>Education</option><option>Shopping</option><option>Bills</option><option>Entertainment</option><option>Health</option><option>Other</option>
+</select>
+<input class="form-control mb-2" name="description" placeholder="Description">
+<input class="form-control mb-2" name="amount" type="number" step="0.01" placeholder="Amount" required>
+<button class="btn btn-danger">Add expense</button>
+</form></div>
+</div>
+<div class="col-lg-7">
+<div class="card p-4"><h4>Spending by category</h4><canvas id="expenseChart"></canvas></div>
+</div>
+</div>
+<div class="card p-4 mt-4">
+<h4>Recent expenses</h4>
+{% if recent %}
+<div class="table-responsive"><table class="table"><tr><th>Category</th><th>Description</th><th>Amount</th><th>Date</th></tr>
+{% for e in recent %}<tr><td>{{ e.category }}</td><td>{{ e.description }}</td><td>₹{{ "%.2f"|format(e.amount) }}</td><td>{{ e.date.strftime("%d %b %Y") }}</td></tr>{% endfor %}
+</table></div>
+{% else %}<p class="text-muted">No expenses recorded yet.</p>{% endif %}
+</div>
+<script>
+new Chart(document.getElementById('expenseChart'), {
+ type:'doughnut',
+ data:{labels:{{ labels|tojson }},datasets:[{data:{{ values|tojson }}}]},
+ options:{responsive:true}
+});
+</script>
+{% endblock %}

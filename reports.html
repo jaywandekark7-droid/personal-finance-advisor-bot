@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Financial Reports</h2>
+<div class="row g-3 my-3">
+<div class="col-md-4"><div class="card p-3"><small>Income</small><h3>₹{{ "%.2f"|format(income) }}</h3></div></div>
+<div class="col-md-4"><div class="card p-3"><small>Expenses</small><h3>₹{{ "%.2f"|format(expense) }}</h3></div></div>
+<div class="col-md-4"><div class="card p-3"><small>Balance</small><h3>₹{{ "%.2f"|format(balance) }}</h3></div></div>
+</div>
+<div class="card p-4"><canvas id="monthlyChart"></canvas></div>
+<script>
+new Chart(document.getElementById('monthlyChart'), {
+ type:'bar',
+ data:{labels:{{ months|tojson }},datasets:[
+ {label:'Income',data:{{ monthly_income|tojson }}},
+ {label:'Expenses',data:{{ monthly_expense|tojson }}}
+ ]},
+ options:{responsive:true}
+});
+</script>
+{% endblock %}
